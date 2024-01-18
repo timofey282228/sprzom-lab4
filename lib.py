@@ -1,3 +1,6 @@
+import time
+import timeit
+
 def _ror(val: int, n: int, m: int):
     save = val & ((1 << n) - 1)
     val >>= n
@@ -162,18 +165,28 @@ class GF2NBElement:
     def mul_v_m_u(self, u: int, v: int):
         r = 0
 
+        #0
         for _ in range(self.m):
             r = (r << 1) & self.mask
             d = 0
+
+            #1
             for j in range(self.m):
                 d <<= 1
+                #2
                 for i in range(self.m):
                     mat = self.mul_matrix[self.m - 1 - i][j]
+                    # opt1 (works)
+                    if mat == 0:
+                        continue
                     d ^= (((u & (1 << i)) >> i) & mat)
 
             c = 0
+            #3
             for i in range(self.m):
-                c ^= ((d & (1 << i)) >> i) & ((v & (1 << i)) >> i)
+                # opt 2
+                # c ^= ((d & (1 << i)) >> i) & ((v & (1 << i)) >> i)
+                c ^= (d & v & (1 << i)) >> i
 
             r |= c
             u = _rol(u, 1, self.m)

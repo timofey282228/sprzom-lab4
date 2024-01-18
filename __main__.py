@@ -2,14 +2,13 @@ from lib import *
 
 a = GF2NBElement(input("a: "))
 b = GF2NBElement(input("b: "))
-# n = input("n: ")
+n = int(input("n: "), 16)
 
 a_add_b = a + b
 a_mul_b = a * b
 a_sqr = a.sqr()
 a_inv = a.inverse()
 a_trace = a.trace()
-
 
 print(
 f"""
@@ -23,3 +22,5 @@ a_trace = {a_trace:X} ({a_trace:b})
 """
 )
 
+a_pow_n = a.pow(n)
+print(f"a^n = {a_pow_n:x} ({a_pow_n:b})")
